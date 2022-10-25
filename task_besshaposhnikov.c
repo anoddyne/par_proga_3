@@ -6,7 +6,7 @@ int main() {
 	double x, function, sum, lastTerm, temp, factorial = 1, last3, changingSign, error;
 	int i = 1, j, termCount = 0;
 
-	printf("Enter the argument value: ");
+	printf("Enter the argument value of sin(x): ");
 	scanf("%lf", &x);
 
 	//Calculating the sum of the Taylor series for the function sin(x)
@@ -29,7 +29,7 @@ int main() {
 
 	printf("The resulting sum of the series: %E\n", sum);
 	printf("%d terms of the Taylor series summed\n", termCount);
-	printf("\nThe difference between the answer from math.h and the resulting sum of the Taylor series: %E\n", error);
+	printf("\nThe difference between the answer from math.h and the resulting sum of the Taylor series is %E\n", error);
 
 	printf("\nOutput of the first three terms of the Taylor series: \n");
 	temp = x;
