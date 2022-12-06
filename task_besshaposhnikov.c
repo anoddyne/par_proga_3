@@ -1,71 +1,38 @@
-#define  _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <math.h>
 
-int main() {
-	double x, function, sum, lastTerm, temp, factorial = 1, last3, changingSign, error;
-	int i = 1, j, termCount = 0;
+double funcSin(double x) {
+	double absLastTerm, lastTerm = x, sum = x;
+	absLastTerm = fabs(lastTerm);
 
-	printf("Enter the argument value of sin(x): ");
-	scanf("%lf", &x);
-
-	//Calculating the sum of the Taylor series for the function sin(x)
-	function = sin(x);
-	printf("\nThe exact value of the function is equal: %E\n", function);
-
-	//Calculating the sum of the Taylor series for the function sin(x)
-	lastTerm = x;
-	sum = x;
-	do
+	// Calculating the sum of a series at the point
+	for (int i = 1; absLastTerm >= 1e-10; i++)
 	{
 		lastTerm *= -(x * x) / (2 * i * (2 * i + 1));
 		sum += lastTerm;
-		termCount++;
-		i++;
-	} while (fabs(lastTerm) >= 1e-10);
-
-	//The difference between the answer from math.h and the resulting sum of the Taylor series
-	error = abs(function - sum);
-
-	printf("The resulting sum of the series: %E\n", sum);
-	printf("%d terms of the Taylor series summed\n", termCount);
-	printf("\nThe difference between the answer from math.h and the resulting sum of the Taylor series is %E\n", error);
-
-	printf("\nOutput of the first three terms of the Taylor series: \n");
-	temp = x;
-	for (i = 1; i <= 3; i++) {
-		printf("%E\n", temp);
-		temp *= -(x * x) / (2 * i * (2 * i + 1));
+		absLastTerm = fabs(lastTerm);
 	}
-	printf("\n");
 
-	temp = x;
+	return sum;
+}
 
-	/*Let's take the number of terms and subtract from them the last 3 terms that we need to display. 
-	But since even powers and factorials of even numbers are skipped in the series, you will have 
-	to multiply the number obtained earlier by 2.*/
-	last3 = 2 * (termCount - 3);
+int main() {
+	double a = -10, b = 10, funcMathSin;
+	int n = 20, count = 0;
 
-	printf("Output of the last three terms of the Taylor series: \n");
+	// Calculation of the counting step
+	double h = (b - a) / n;
 
-	/*If the number of terms is even, then the antepenultimateand last terms will be positive,
-	and the penultimate term will be negative.
-	If the number of terms is odd, then the antepenultimate and last terms will be negative, 
-	and the penultimate term will be positive.*/
-	changingSign = termCount % 2 != 0 ? 1 : -1;
+	for (double x = a; x <= b; x += h) {
 
-	//Output the last three terms of the Taylor series
-	for (j = 1; j < 2 * termCount; j++) {
-		factorial *= j;
-
-		/*In this condition, we cut off all members of the series, except for the last three, 
-		and even numbers, since in our expansion of the Taylor series there are no even numbers 
-		in powers and factorials of numbers.*/
-		if (last3 < j && j % 2 != 0) {
-			temp = changingSign * (pow(x, j)) / (factorial);
-			printf("%E\n", temp);
-			changingSign *= -1;
-			last3++;
+		// Calculation and output of function values in the first and last three arguments
+		if (count <= 2 || count >= n - 2 && count <= n) {
+			funcMathSin = sin(x);
+			printf("The value of the sine function at the point %.2lf = %E\n", x, funcMathSin);
+			printf("The value of the Taylor series at the point %.2lf = %E\n", x, funcSin(x));
+			printf("The difference between values: %E\n\n", fabs(funcMathSin - funcSin(x)));
 		}
+
+		count++;
 	}
 }
